@@ -9,10 +9,6 @@ using Trackr.Domain.Interfaces;
 
 namespace Trackr.Infrastructure.Interfaces
 {
-    public interface IClient
-    {
-        public AuthProvider ProviderName { get; }
-        public Task<PlaybackState> GetPlaybackStateAsync(string AuthToken); 
-    }
+    
 
 }

@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Trackr.Application\Trackr.Application.csproj" />
+    <ProjectReference Include="..\Trackr.Infrastructure\Trackr.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

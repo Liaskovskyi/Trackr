@@ -25,6 +25,12 @@ namespace Trackr.Infrastructure
                 .ForMember(dest => dest.ReleaseDate, opt => opt.MapFrom(src => src.Album.Release_date))
                 .ForPath(dest => dest.AlbumId, opt => opt.MapFrom(src => src.Album.Id))
                 .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration_ms));
+
+            CreateMap<SpotifyTokensDTO, Tokens>()
+                .ForMember(dest => dest.AccessToken, opt => opt.MapFrom(src => src.access_token))
+                .ForMember(dest => dest.RefreshToken, opt => opt.MapFrom(src => src.refresh_token))
+                .ForMember(dest => dest.ExpiresAt, opt => opt.MapFrom(src => DateTime.UtcNow.AddSeconds(src.expires_in)));
+
         }
     }
 }

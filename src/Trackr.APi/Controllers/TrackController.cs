@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics.Metrics;
 using Trackr.Api.Services;
 using Trackr.Application.Interfaces;
@@ -19,13 +20,13 @@ namespace Trackr.Api.Controllers
             _playbackService = playbackService;
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("current")]
         public async Task<IActionResult> GetCurrentTrack()
         {
-            int userId = 1;
             try
             {
-                var currentTrack = await _playbackService.GetCurrentTrackAsync(userId);
+                var currentTrack = await _playbackService.GetCurrentTrackAsync(User);
 
                 if (currentTrack == null) return NotFound("No playback found");
 
