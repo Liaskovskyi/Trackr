@@ -12,6 +12,8 @@ using Trackr.Api.Mappers;
 using Microsoft.Extensions.Options;
 using Trackr.Api.Configuration;
 using StackExchange.Redis;
+using System.Security.Principal;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,10 +55,13 @@ builder.Services.AddAutoMapper(typeof(SpotifyMapProfile), typeof(MappingProfile)
 
 builder.Services.AddHttpClient<SpotifyClient>();
 
+//builder.Services.AddScoped<IPrincipal, ClaimsPrincipal>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPlaybackService, PlaybackService>();
 builder.Services.AddScoped<IClient, SpotifyClient>();
+builder.Services.AddScoped<ITrackService, TrackService>();
 
 builder.Services.AddSingleton<IJwtGenerator, JWTGenerator>();
 

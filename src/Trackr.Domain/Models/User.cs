@@ -17,5 +17,6 @@ namespace Trackr.Domain.Models
         //public string Email { get; set; }
         //public string PasswordHash { get; set; }
         public DateTime CreatedAt { get; }
+        //public ICollection<Listened> Listens { get; set; } = new List<Listened>();
     }
 }

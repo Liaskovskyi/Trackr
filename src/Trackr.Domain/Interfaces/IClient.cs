@@ -13,5 +13,6 @@ namespace Trackr.Domain.Interfaces
         public Task<PlaybackState> GetPlaybackStateAsync(string authToken);
         public Task<Result<Tokens>> RequestTokensAsync(string code);
         public Task<Result<Tokens>> RefreshAccessTokenAsync(string refreshToken);
+        public Task<Result<Tracks>> GetTracksAfterTime(string authToken, long after);
     }
 }

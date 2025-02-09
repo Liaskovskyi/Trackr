@@ -2,8 +2,8 @@
 
 namespace Trackr.Api.Services
 {
-    public interface ITrackService
+    /*public interface ITrackService
     {
         Task<TrackDTO> GetCurrentTrackAsync();
-    }
+    }*/
 }

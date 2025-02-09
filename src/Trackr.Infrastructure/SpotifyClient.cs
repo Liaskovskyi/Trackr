@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,7 @@ using System.Threading.Tasks;
 using Trackr.Domain.Interfaces;
 using Trackr.Domain.Models;
 using Trackr.Infrastructure.DTO;
+using Trackr.Infrastructure.Extensions;
 using Trackr.Infrastructure.Interfaces;
 
 namespace Trackr.Infrastructure
@@ -66,7 +69,8 @@ namespace Trackr.Infrastructure
             requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Basic", encodedIds);
 
             var response = await _httpClient.SendAsync(requestMessage);
-            if (!response.IsSuccessStatusCode) return Result<Tokens>.Failure(new List<ResultError> { new ResultError("RefreshTokenRequestError", await response.Content.ReadAsStringAsync()) });
+            if (!response.IsSuccessStatusCode) return await response.HandleError<Tokens>();
+
 
             var responseBody = await response.Content.ReadAsStringAsync();
             SpotifyTokensDTO tokens = JsonConvert.DeserializeObject<SpotifyTokensDTO>(responseBody)!;
@@ -90,6 +94,34 @@ namespace Trackr.Infrastructure
             var playbackState = _mapper.Map<PlaybackState>(spotifyPlaybackState);
 
             return playbackState;
+        }
+
+        public async Task<Result<Tracks>> GetTracksAfterTime(string authToken, long after)
+        {
+            if (authToken == null || after < 0 || after > DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()) return Result<Tracks>.Failure("NullParameters", "Incorrect parameters.");
+
+            Dictionary<string, string> queryParams = new Dictionary<string, string> {
+                { "limit", "50" },
+                { "after",after.ToString() }
+            };
+            string fullUrl = QueryHelpers.AddQueryString("https://api.spotify.com/v1/me/player/recently-played", queryParams);
+
+
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, fullUrl);
+            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+            
+
+            HttpResponseMessage? response = await _httpClient.SendAsync(requestMessage);
+            if (!response.IsSuccessStatusCode) return await response.HandleError<Tracks>();
+
+
+            string? responseBody = await response.Content.ReadAsStringAsync();
+            SpotifyTracksDTO? spotifyTracks = JsonConvert.DeserializeObject<SpotifyTracksDTO>(responseBody);
+
+            Tracks tracks = _mapper.Map<Tracks>(spotifyTracks);
+
+            return Result<Tracks>.Success(tracks);
+
         }
 
         

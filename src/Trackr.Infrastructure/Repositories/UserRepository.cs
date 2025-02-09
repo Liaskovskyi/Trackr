@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Identity;
 using Trackr.Infrastructure.DTO;
 using AutoMapper;
 using System.Security.Claims;
+using System.Reflection.Metadata.Ecma335;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
 namespace Trackr.Infrastructure.Repositories
 {
@@ -101,6 +103,30 @@ namespace Trackr.Infrastructure.Repositories
             IdentityResult result = await _userManager.SetAuthenticationTokenAsync(user, providerName.ToString(), "refresh_token", refreshToken);
 
             return _mapper.Map<Result<bool>>(result);
+        }
+
+        public async Task<Result<long>> GetLastPlayedTrackTimeFromDb(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return Result<long>.Failure("401", "User is not authenticated.");
+
+            DateTime time = await _context.Listened.Where(listen => listen.UserId == id).Select(l=>l.ListenedAt).FirstOrDefaultAsync();
+            long after = 0;
+            if(time != DateTime.MinValue) after = ((DateTimeOffset)time).ToUnixTimeMilliseconds();
+
+            return Result<long>.Success(after);
+        }
+
+        public async Task SaveReceivedTracksToDbAsync(string id, Tracks tracks)
+        {
+            if (string.IsNullOrEmpty(id)) throw new ArgumentNullException(nameof(id));
+            if (tracks!=null && tracks.TracksArray != null)
+            {
+                TrackItem[] items = tracks.TracksArray;
+                //add track 
+                //add album
+                //add listened tracks
+            }
+            
         }
     }
 }

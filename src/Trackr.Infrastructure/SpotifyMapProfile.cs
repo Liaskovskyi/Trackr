@@ -19,7 +19,7 @@ namespace Trackr.Infrastructure
                 .ForMember(dest => dest.CurrentTrack, opt => opt.MapFrom(src => src.Item));
 
 
-            CreateMap<SpotifyTrack, Track>()
+            CreateMap<SpotifyTrackDTO, Track>()
                 .ForMember(dest => dest.TrackId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.ReleaseDate, opt => opt.MapFrom(src => src.Album.Release_date))
@@ -30,6 +30,15 @@ namespace Trackr.Infrastructure
                 .ForMember(dest => dest.AccessToken, opt => opt.MapFrom(src => src.access_token))
                 .ForMember(dest => dest.RefreshToken, opt => opt.MapFrom(src => src.refresh_token))
                 .ForMember(dest => dest.ExpiresAt, opt => opt.MapFrom(src => DateTime.UtcNow.AddSeconds(src.expires_in)));
+
+            CreateMap<SpotifyTracksDTO, Tracks>()
+                .ForMember(dest => dest.TracksArray, opt => opt.MapFrom(src => src.Items));
+
+            CreateMap<DTO.Cursors, Domain.Models.Cursors>();
+
+            CreateMap<SpotifyItemDTO, TrackItem>()
+                .ForMember(dest => dest.PlayedAt, opt => opt.MapFrom(src => src.Played_at));
+
 
         }
     }

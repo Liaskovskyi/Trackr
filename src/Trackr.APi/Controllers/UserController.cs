@@ -78,10 +78,10 @@ namespace Trackr.Api.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("spotify/login")]
-        public async Task<IActionResult> SpotifyLogin()
+        public  IActionResult SpotifyLogin()
         {
             string clientId = _configuration["SpotifyClient:ClientId"]!;
-            string scope = "user-read-playback-state";
+            string scope = "user-read-playback-state user-read-recently-played";
             string redirectUri = _configuration["SpotifyClient:RedirectUri"]!;
             string state = _configuration["SpotifyClient:State"]!;
             string uri = "https://accounts.spotify.com/authorize?" +
