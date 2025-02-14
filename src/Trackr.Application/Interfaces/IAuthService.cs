@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Trackr.Application.DTOs;
 using Trackr.Domain.Models;
+using Trackr.Domain.Models.Database;
 
 namespace Trackr.Application.Interfaces
 {

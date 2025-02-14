@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using static Trackr.Infrastructure.DTO.SpotifyPlaybackState;
 using Trackr.Domain.Models;
 using Trackr.Infrastructure.DTO;
+using Trackr.Domain.Models.Database;
 
 namespace Trackr.Infrastructure
 {
@@ -18,13 +19,20 @@ namespace Trackr.Infrastructure
                 .ForMember(dest => dest.IsPlaying, opt => opt.MapFrom(src => src.Is_Playing))
                 .ForMember(dest => dest.CurrentTrack, opt => opt.MapFrom(src => src.Item));
 
+            CreateMap<SpotifyAlbumDTO, Album>()
+                .ForMember(dest => dest.AlbumId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Album_type))
+                .ForMember(dest => dest.ReleaseDate, opt => opt.MapFrom(src => src.Release_date))
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Images.FirstOrDefault().Url));
 
             CreateMap<SpotifyTrackDTO, Track>()
                 .ForMember(dest => dest.TrackId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.ReleaseDate, opt => opt.MapFrom(src => src.Album.Release_date))
-                .ForPath(dest => dest.AlbumId, opt => opt.MapFrom(src => src.Album.Id))
-                .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration_ms));
+                .ForMember(dest => dest.AlbumId, opt => opt.MapFrom(src => src.Album.Id))
+                .ForMember(dest => dest.Album, opt => opt.MapFrom(src => src.Album))
+                .ForMember(dest => dest.DurationMs, opt => opt.MapFrom(src => src.Duration_ms))
+                .ForMember(dest => dest.ISRC, opt => opt.MapFrom(src => src.External_Ids.ISRC));
 
             CreateMap<SpotifyTokensDTO, Tokens>()
                 .ForMember(dest => dest.AccessToken, opt => opt.MapFrom(src => src.access_token))
@@ -36,9 +44,21 @@ namespace Trackr.Infrastructure
 
             CreateMap<DTO.Cursors, Domain.Models.Cursors>();
 
-            CreateMap<SpotifyItemDTO, TrackItem>()
-                .ForMember(dest => dest.PlayedAt, opt => opt.MapFrom(src => src.Played_at));
+            CreateMap<SimplifiedArtist, Artist>()
+                .ForMember(dest => dest.ArtistId, opt => opt.MapFrom(src => src.Id));
 
+            CreateMap<SpotifyItemDTO, TrackItem>()
+                .ForMember(dest => dest.PlayedAt, opt => opt.MapFrom(src => src.Played_at))
+                .ForMember(dest => dest.Artists, opt => opt.MapFrom(src => src.Track.Artists));
+
+            CreateMap<SpotifyArtist, ArtistWithGenres>()
+                .ForPath(dest => dest.Artist.ArtistId, opt => opt.MapFrom(src => src.Id))
+                .ForPath(dest => dest.Artist.Name, opt => opt.MapFrom(src => src.Name))
+                .ForPath(dest => dest.Artist.ImageUrl, opt => opt.MapFrom(src => src.Images.FirstOrDefault().Url))
+                .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.Genres));
+
+            /*CreateMap<SpotifyArtists, SpotifyArtist>()
+                .ForPath(dest => dest, opt => opt.MapFrom(src => src.Artists));*/
 
         }
     }

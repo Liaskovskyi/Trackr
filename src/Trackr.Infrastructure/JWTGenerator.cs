@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Trackr.Application.Interfaces;
-using Trackr.Domain.Models;
+using Trackr.Domain.Models.Database;
 
 namespace Trackr.Infrastructure
 {

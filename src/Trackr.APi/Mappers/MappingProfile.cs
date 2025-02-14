@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Trackr.Api.Models;
-using Trackr.Domain.Models;
+using Trackr.Domain.Models.Database;
 
 namespace Trackr.Api.Mappers
 {

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Trackr.Application.Interfaces;
 using Trackr.Domain.Interfaces;
 using Trackr.Domain.Models;
+using Trackr.Domain.Models.Database;
 
 namespace Trackr.Application.Services
 {

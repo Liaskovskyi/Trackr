@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Trackr.Domain.Models.Database;
 
 namespace Trackr.Domain.Models
 {
@@ -22,6 +23,7 @@ namespace Trackr.Domain.Models
     {
         public Track? Track { get; set; }
         public DateTime PlayedAt { get; set; }
+        public Artist[]? Artists { get; set; }
     }
 
 }

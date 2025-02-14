@@ -7,13 +7,13 @@ using Trackr.Infrastructure.Repositories;
 using Trackr.Infrastructure.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using Trackr.Domain.Models;
 using Trackr.Api.Mappers;
 using Microsoft.Extensions.Options;
 using Trackr.Api.Configuration;
 using StackExchange.Redis;
 using System.Security.Principal;
 using System.Security.Claims;
+using Trackr.Domain.Models.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +59,10 @@ builder.Services.AddHttpClient<SpotifyClient>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITrackRepository, TrackRepository>();
+builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
+builder.Services.AddScoped<IAlbumRepository, AlbumRepository>();
+builder.Services.AddScoped<IListenedRepository, ListenedRepository>();
 builder.Services.AddScoped<IPlaybackService, PlaybackService>();
 builder.Services.AddScoped<IClient, SpotifyClient>();
 builder.Services.AddScoped<ITrackService, TrackService>();

@@ -12,6 +12,19 @@ namespace Trackr.Infrastructure.DTO
         public string? Id { get; set; }
         public string? Name { get; set; }
         public int Duration_ms { get; set; }
-        public SpotifyAlbum? Album { get; set; }
+        public SpotifyAlbumDTO? Album { get; set; }
+        public SimplifiedArtist[]? Artists { get; set; }
+        public ExternalId? External_Ids {  get; set; } 
+    }
+
+    public class SimplifiedArtist
+    {
+        public string? Id { get; set; }
+        public string? Name { get; set; }
+    }
+
+    public class ExternalId
+    {
+        public string? ISRC { get; set;}
     }
 }

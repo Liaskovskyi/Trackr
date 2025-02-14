@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Trackr.Domain.Models;
+using Trackr.Domain.Models.Database;
 
 namespace Trackr.Domain.Interfaces
 {
@@ -14,5 +15,6 @@ namespace Trackr.Domain.Interfaces
         public Task<Result<Tokens>> RequestTokensAsync(string code);
         public Task<Result<Tokens>> RefreshAccessTokenAsync(string refreshToken);
         public Task<Result<Tracks>> GetTracksAfterTime(string authToken, long after);
+        public Task<ArtistWithGenres[]?> GetSeveralArtistsAsync(IEnumerable<string> ids, string token);
     }
 }

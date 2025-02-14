@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Trackr.Domain.Models
+namespace Trackr.Domain.Models.Database
 {
     public class User : IdentityUser
     {

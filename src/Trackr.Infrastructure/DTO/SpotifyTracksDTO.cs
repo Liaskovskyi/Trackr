@@ -21,7 +21,7 @@ namespace Trackr.Infrastructure.DTO
 
     internal class SpotifyItemDTO
     {
-        public SpotifyTrackDTO? Track { get; set; }
+        public SpotifyTrackDTO? Track { get; set; } = null;
         public DateTime Played_at { get; set; }
         //public object context { get; set; }
     }

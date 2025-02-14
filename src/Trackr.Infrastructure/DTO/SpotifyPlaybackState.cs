@@ -13,16 +13,9 @@ namespace Trackr.Infrastructure.DTO
         public int Progress_Ms { get; set; }
         public SpotifyTrackDTO? Item { get; set; }
 
-        public class SpotifyArtist
-        {
-            public string? Name { get; set; }
-        }
+        
 
-        public class SpotifyAlbum
-        {
-            public string? Id { get; set; }
-            public string? Release_date { get; set; }
-        }
+        
 
         
     }

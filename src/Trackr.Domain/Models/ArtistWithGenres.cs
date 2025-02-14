@@ -7,10 +7,9 @@ using Trackr.Domain.Models.Database;
 
 namespace Trackr.Domain.Models
 {
-    public class PlaybackState
+    public class ArtistWithGenres
     {
-        public Track? CurrentTrack { get; set; }
-        public int ElapsedTime { get; set; }
-        public bool IsPlaying { get; set; }
+        public Artist? Artist { get; set; }
+        public string[]? Genres { get; set; }
     }
 }

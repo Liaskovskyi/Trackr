@@ -9,6 +9,7 @@ using Trackr.Api.Extensions;
 using Trackr.Api.Models;
 using Trackr.Application.Interfaces;
 using Trackr.Domain.Models;
+using Trackr.Domain.Models.Database;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Trackr.Api.Controllers

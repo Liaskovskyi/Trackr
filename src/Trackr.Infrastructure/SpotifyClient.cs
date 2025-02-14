@@ -11,9 +11,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Trackr.Domain.Interfaces;
 using Trackr.Domain.Models;
+using Trackr.Domain.Models.Database;
 using Trackr.Infrastructure.DTO;
 using Trackr.Infrastructure.Extensions;
 using Trackr.Infrastructure.Interfaces;
+using static Trackr.Infrastructure.DTO.SpotifyPlaybackState;
 
 namespace Trackr.Infrastructure
 {
@@ -124,6 +126,27 @@ namespace Trackr.Infrastructure
 
         }
 
-        
+        public async Task<ArtistWithGenres[]?> GetSeveralArtistsAsync(IEnumerable<string> ids, string authToken)
+        {
+            if (!ids.Any()) throw new ArgumentException("No ids were provided.");
+            if (ids.Count() > 50) throw new ArgumentException("Max 50 artists can be requested at once.");
+
+            string baseUrl = "https://api.spotify.com/v1/artists";  
+
+            string idsParam = string.Join(",", ids);
+
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}?ids={idsParam}");
+            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+
+            HttpResponseMessage? response = await _httpClient.SendAsync(requestMessage);
+            response.EnsureSuccessStatusCode();
+
+            string? responseBody = await response.Content.ReadAsStringAsync();
+            SpotifyArtists? spotifyArtists = JsonConvert.DeserializeObject<SpotifyArtists>(responseBody);
+
+            ArtistWithGenres[] artists = _mapper.Map<ArtistWithGenres[]>(spotifyArtists?.Artists);
+
+            return artists;
+        }
     }
 }
