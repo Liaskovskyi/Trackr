@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Trackr.Domain.Interfaces;
 using Trackr.Domain.Models;
 
-namespace Trackr.Infrastructure
+namespace Trackr.Infrastructure.Clients
 {
     public class RedisCacheClient : ICache
     {

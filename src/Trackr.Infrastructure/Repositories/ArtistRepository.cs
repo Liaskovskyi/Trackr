@@ -38,29 +38,6 @@ namespace Trackr.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        /*public async Task SaveArtists(IEnumerable<string?>? artists)
-        {
-            if (artists != null)
-            {
-                // (add genres)
-                List<string?> existing = await _context.Artists
-                    .Where(a => artists.Contains(a.ArtistId))
-                    .Select(a => a.ArtistId).ToListAsync();
-
-                HashSet<string> existingSet = new(existing.Where(id => id != null)!);
-
-                var toAdd = artists.Where(a => a != null && !existingSet.Contains(a!));
-
-                ArtistWithGenres[] newArtists = await _client.GetSeveralArtists(toAdd!);
-
-                //await _context.Artists.AddRangeAsync(toAdd);
-
-
-                //var artistToAdd = _context.Artists.Where()
-            }
-            //return Task.CompletedTask;
-        }*/
-
         public async Task SaveArtistsToDbAsync(Artist?[] artists)
         {
             if(artists.Length == 0) return;

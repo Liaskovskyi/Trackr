@@ -22,13 +22,15 @@ namespace Trackr.Application.Services
         private readonly IArtistRepository _artistRepository;
         private readonly IAlbumRepository _albumRepository;
         private readonly ITrackRepository _trackRepository;
+        private readonly IMessageQueue _mq;
 
         public TrackService(IUserRepository userRepository, 
             IAuthService authService, IClient client, 
             IListenedRepository listenedRepository, 
             IArtistRepository artistRepository, 
             IAlbumRepository albumRepository,
-            ITrackRepository trackRepository)
+            ITrackRepository trackRepository,
+            IMessageQueue mq)
         {
             _userRepository = userRepository;
             _authService = authService;
@@ -37,6 +39,7 @@ namespace Trackr.Application.Services
             _artistRepository = artistRepository;
             _albumRepository = albumRepository;
             _trackRepository = trackRepository;
+            _mq = mq;
         }
 
         public async Task<Result<Tracks>> GetLastPlayedTracks(ClaimsPrincipal claimsPrincipal)
@@ -52,8 +55,20 @@ namespace Trackr.Application.Services
             Result<Tracks> tracks = await _client.GetTracksAfterTime(token, after);
 
             await SaveReceivedTracksToDbAsync(userId, tracks.Value, token);
-
+            
             return tracks;
+        }
+
+        public async Task<Result<Tracks>> UpdateLastPlayedTracks(ClaimsPrincipal claimsPrincipal)
+        {
+            Result<Tracks> result = await GetLastPlayedTracks(claimsPrincipal);
+
+            string? userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId)) throw new InvalidOperationException("UserId is missing.");
+
+            await _mq.SendDelayedMessageAsync(userId);
+
+            return result;
         }
 
         public async Task<Result<long>> GetLastPlayedTrackTime(ClaimsPrincipal claimsPrincipal)

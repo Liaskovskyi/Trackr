@@ -12,5 +12,6 @@ namespace Trackr.Application.Interfaces
     {
         public Task<Result<Tracks>> GetLastPlayedTracks(ClaimsPrincipal claimsPrincipal);
         public Task<Result<long>> GetLastPlayedTrackTime(ClaimsPrincipal claimsPrincipal);
+        public Task<Result<Tracks>> UpdateLastPlayedTracks(ClaimsPrincipal claimsPrincipal);
     }
 }

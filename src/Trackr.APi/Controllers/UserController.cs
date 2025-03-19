@@ -20,12 +20,14 @@ namespace Trackr.Api.Controllers
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+        private readonly ITrackService _trackService;
 
-        public UserController(IAuthService authService, IMapper mapper, IConfiguration configuration)
+        public UserController(IAuthService authService, IMapper mapper, IConfiguration configuration, ITrackService trackService)
         {
             _authService = authService;
             _mapper = mapper;
             _configuration = configuration;
+            _trackService = trackService;
         }
 
         [HttpPost("Registration")]
@@ -41,6 +43,9 @@ namespace Trackr.Api.Controllers
                 var problemDetails = new ValidationProblemDetails(state);
                 return BadRequest(problemDetails);
             }
+
+            Result<Tracks> getHistory = await _trackService.UpdateLastPlayedTracks(User);
+            if (!getHistory.IsSuccess) return BadRequest(getHistory);
 
             return Ok($"User {userInfo.Username} registered successfully.");
         }
@@ -93,7 +98,6 @@ namespace Trackr.Api.Controllers
                 $"&state={state}";
 
             return Ok(uri);
-            //return Redirect(uri);
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
@@ -108,13 +112,6 @@ namespace Trackr.Api.Controllers
 
             return Ok("Spotify connected successfully.");
 
-            /*Result<Tokens> tokens = await _authService.GetClientTokens(code);
-
-            if (!tokens.IsSuccess) return BadRequest(tokens.RetrieveErrors());
-
-            JWTDTO response = new JWTDTO(tokens.Value.AccessToken, tokens.Value.RefreshToken);
-
-            return Ok(response);*/
         }
 
         //[Authorize(AuthenticationSchemes = "Bearer")]

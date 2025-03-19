@@ -361,3 +361,15 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Environment files with secrets
+.env
+.env.local
+.env.*.local
+
+# RabbitMQ runtime data
+rabbitmq-data/
+
+# User-specific files
+*.user
+**/*.user

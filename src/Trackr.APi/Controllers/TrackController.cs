@@ -61,7 +61,7 @@ namespace Trackr.Api.Controllers
             }
             if (tracks.Value?.TracksArray is []) return Ok("No tracks were played during that time.");
             
-            var clearTracks = new { ItemsCount = tracks.Value.TracksArray.Count(), tracks.Value?.TracksArray };
+            var clearTracks = new { ItemsCount = tracks.Value?.TracksArray?.Length, tracks.Value?.TracksArray };
 
             return Ok(clearTracks);
         }

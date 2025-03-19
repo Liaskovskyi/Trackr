@@ -30,24 +30,6 @@ namespace Trackr.Infrastructure.Repositories
             _mapper = mapper;
         }
 
-        /*public async Task<IdentityResult> RegisterUserAsync1(User userInfo)
-        {
-            var existingUserByEmail = await _userManager.FindByEmailAsync(userInfo.Email);
-            if (existingUserByEmail != null) return IdentityResult.Failed(new IdentityError{Code = "DuplicateEmail", Description = "User with such email already exists." });
-
-            var result = await _userManager.CreateAsync(userInfo, userInfo.PasswordHash);
-            *//*List<string> errors = new();
-            foreach (var error in result.Errors)
-            {
-                errors.Add(error.Description);
-            }
-            if (!result.Succeeded) return Result.Failure(errors);
-
-            return Result.Success();*//*
-
-            return result;
-        }*/
-
         public async Task<Result<bool>> RegisterUserAsync(User user)
         {
             if (user.PasswordHash == null)
@@ -69,7 +51,6 @@ namespace Trackr.Infrastructure.Repositories
             {
                 return Result<bool>.Failure("NullPasswordOrEmail", "Password and email are required.");
             }
-            //Console.WriteLine("Password: "+userCredentials.PasswordHash);
             var result = await _userManager.CheckPasswordAsync(userCredentials, password);
             if (!result)
             {

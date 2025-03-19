@@ -14,6 +14,8 @@ using StackExchange.Redis;
 using System.Security.Principal;
 using System.Security.Claims;
 using Trackr.Domain.Models.Database;
+using Trackr.Infrastructure.Clients;
+using Trackr.Infrastructure.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,11 +44,14 @@ var muxer = ConnectionMultiplexer.Connect(
                 EndPoints = { { redisConfig["Host"]!, int.Parse(redisConfig["Port"]!) } },
                 User = redisConfig["User"],
                 Password = redisConfig["Password"]
-            }
-        );
+            });
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(muxer);
 builder.Services.AddScoped<ICache, RedisCacheClient>();
+
+var rabbitMQSettings = builder.Configuration.GetSection("RabbitMQ");
+builder.Services.AddSingleton<IMessageQueue, RabbitMQClient>(provider=> 
+    new RabbitMQClient(rabbitMQSettings["HostName"]!, rabbitMQSettings["UserName"]!, rabbitMQSettings["Password"]!));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerServices();
@@ -68,10 +73,10 @@ builder.Services.AddScoped<IClient, SpotifyClient>();
 builder.Services.AddScoped<ITrackService, TrackService>();
 
 builder.Services.AddSingleton<IJwtGenerator, JWTGenerator>();
+builder.Services.AddHostedService<MessageConsumerService>();
 
 builder.Services.AddControllers();
-//Repo and db context
-//Auth
+
 
 
 var app = builder.Build();

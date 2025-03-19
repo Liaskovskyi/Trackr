@@ -17,7 +17,7 @@ using Trackr.Infrastructure.Extensions;
 using Trackr.Infrastructure.Interfaces;
 using static Trackr.Infrastructure.DTO.SpotifyPlaybackState;
 
-namespace Trackr.Infrastructure
+namespace Trackr.Infrastructure.Clients
 {
     public class SpotifyClient : IClient
     {
@@ -27,8 +27,8 @@ namespace Trackr.Infrastructure
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
-        public SpotifyClient(HttpClient httpClient, IMapper mapper, IConfiguration configuration) 
-        {  
+        public SpotifyClient(HttpClient httpClient, IMapper mapper, IConfiguration configuration)
+        {
             _httpClient = httpClient;
             _mapper = mapper;
             _configuration = configuration;
@@ -92,7 +92,7 @@ namespace Trackr.Infrastructure
 
             var responseBody = await response.Content.ReadAsStringAsync();
             var spotifyPlaybackState = JsonConvert.DeserializeObject<SpotifyPlaybackState>(responseBody);
-            
+
             var playbackState = _mapper.Map<PlaybackState>(spotifyPlaybackState);
 
             return playbackState;
@@ -111,7 +111,7 @@ namespace Trackr.Infrastructure
 
             HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, fullUrl);
             requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
-            
+
 
             HttpResponseMessage? response = await _httpClient.SendAsync(requestMessage);
             if (!response.IsSuccessStatusCode) return await response.HandleError<Tracks>();
@@ -131,7 +131,7 @@ namespace Trackr.Infrastructure
             if (!ids.Any()) throw new ArgumentException("No ids were provided.");
             if (ids.Count() > 50) throw new ArgumentException("Max 50 artists can be requested at once.");
 
-            string baseUrl = "https://api.spotify.com/v1/artists";  
+            string baseUrl = "https://api.spotify.com/v1/artists";
 
             string idsParam = string.Join(",", ids);
 

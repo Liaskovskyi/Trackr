@@ -9,11 +9,12 @@ using Trackr.Domain.Models;
 using Trackr.Infrastructure.DTO;
 using Trackr.Domain.Models.Database;
 
-namespace Trackr.Infrastructure
+namespace Trackr.Infrastructure.Mappers
 {
     public class SpotifyMapProfile : Profile
     {
-        public SpotifyMapProfile() {
+        public SpotifyMapProfile()
+        {
             CreateMap<SpotifyPlaybackState, PlaybackState>()
                 .ForMember(dest => dest.ElapsedTime, opt => opt.MapFrom(src => src.Progress_Ms))
                 .ForMember(dest => dest.IsPlaying, opt => opt.MapFrom(src => src.Is_Playing))
@@ -56,9 +57,6 @@ namespace Trackr.Infrastructure
                 .ForPath(dest => dest.Artist.Name, opt => opt.MapFrom(src => src.Name))
                 .ForPath(dest => dest.Artist.ImageUrl, opt => opt.MapFrom(src => src.Images.FirstOrDefault().Url))
                 .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.Genres));
-
-            /*CreateMap<SpotifyArtists, SpotifyArtist>()
-                .ForPath(dest => dest, opt => opt.MapFrom(src => src.Artists));*/
 
         }
     }
